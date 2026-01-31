@@ -11,29 +11,22 @@ struct vec3_t {
         struct { float x{}, y{}, z{}; };
         union {
             struct {
-                // Y axis
                 float pitch{};
-                // Z axis
                 float yaw{};
-                // X axis
                 float roll{};
             } UE4;
             struct {
-                // Z axis
                 float yaw{};
-                // X axis
                 float roll{};
-                // Y axis
                 float pitch{};
             } Unity;
         } Rot;
         float data[3];
     };
-    
+
     inline vec3_t() noexcept : x(0.f), y(0.f), z(0.f) {};
     inline vec3_t(float x, float y, float z) noexcept : x(x), y(y), z(z) {};
-    
-    // Static methods
+
     inline static float Angle(vec3_t from, vec3_t to);
     inline static float Dot(vec3_t, vec3_t);
     [[maybe_unused]] inline static vec3_t ClampMagnitude(vec3_t, float);
@@ -59,16 +52,14 @@ struct vec3_t {
     inline static vec3_t NormalizeEuler(vec3_t, bool is180 = true);
     inline static float NormalizeAngle(float f, bool is180 = true);
     [[maybe_unused]] inline static vec3_t FromString(std::string);
-    
-    // Instance methods
+
     inline vec3_t orthogonal() const { return Orthogonal(*this); }
     inline float magnitude() const { return Magnitude(*this); }
     inline float sqrMagnitude() const { return SqrMagnitude(*this); }
     inline vec3_t normalized() const { return Normalize(*this); }
     [[maybe_unused]] inline vec3_t normalizedEuler(bool is180 = true) const { return NormalizeEuler(*this, is180); }
     inline std::string str() const { return std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(z); }
-    
-    // Operators
+
     bool operator==(const vec3_t& v) const { return x == v.x && y == v.y && z == v.z; }
     bool operator!=(const vec3_t& v) const { return x != v.x || y != v.y || z != v.z; }
     vec3_t& operator+=(const vec3_t& inV) { x += inV.x; y += inV.y; z += inV.z; return *this; }
@@ -77,8 +68,7 @@ struct vec3_t {
     vec3_t& operator/=(float s) { x /= s; y /= s; z /= s; return *this; }
     vec3_t& operator/=(const vec3_t& inV) { x /= inV.x; y /= inV.y; z /= inV.z; return *this; }
     vec3_t operator-() const { return vec3_t(-x, -y, -z); }
-    
-    // Static constants
+
     static const vec3_t infinityVec;
     static const vec3_t zero;
     static const vec3_t one;
@@ -90,7 +80,6 @@ struct vec3_t {
     static const vec3_t back;
 };
 
-// Static constants definitions
 inline const vec3_t vec3_t::infinityVec(FLT_MAX, FLT_MAX, FLT_MAX);
 inline const vec3_t vec3_t::zero(0.f, 0.f, 0.f);
 inline const vec3_t vec3_t::one(1.f, 1.f, 1.f);
@@ -101,7 +90,6 @@ inline const vec3_t vec3_t::right(1.f, 0.f, 0.f);
 inline const vec3_t vec3_t::forward(0.f, 0.f, 1.f);
 inline const vec3_t vec3_t::back(0.f, 0.f, -1.f);
 
-// Operator overloads
 inline vec3_t operator+(const vec3_t& lhs, const vec3_t& rhs) { return vec3_t(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z); }
 inline vec3_t operator-(const vec3_t& lhs, const vec3_t& rhs) { return vec3_t(lhs.x - rhs.x, lhs.y - rhs.y, lhs.z - rhs.z); }
 inline vec3_t operator*(const vec3_t& inV, const float s) { return vec3_t(inV.x * s, inV.y * s, inV.z * s); }
@@ -110,7 +98,6 @@ inline vec3_t operator*(const vec3_t& lhs, const vec3_t& rhs) { return vec3_t(lh
 inline vec3_t operator/(const vec3_t& inV, const float s) { return vec3_t(inV.x / s, inV.y / s, inV.z / s); }
 inline vec3_t operator/(const vec3_t& lhs, const vec3_t& rhs) { return vec3_t(lhs.x / rhs.x, lhs.y / rhs.y, lhs.z / rhs.z); }
 
-// Method implementations
 inline float vec3_t::Angle(vec3_t from, vec3_t to) {
     float v = Dot(from, to) / (from.magnitude() * to.magnitude());
     v = fmax(v, -1.0);
@@ -222,7 +209,7 @@ vec3_t vec3_t::Orthogonal(vec3_t v) {
      multi = a + vec3_t(b / 200, b / 200, b / 200);
      multi = a + vec3_t(0, b / 200, b / 200);
      if(!(std::find(ret.begin(), ret.end(), multi) != ret.end())){
- 
+
      ret.push_back(multi);
      }
     }
@@ -300,5 +287,3 @@ vec3_t vec3_t::NormalizeEuler(vec3_t vec, bool is180) {
     if (!buffer.empty()) commands.push_back(buffer);
     return vec3_t(std::atof(commands[0].c_str()), std::atof(commands[1].c_str()), std::atof(commands[2].c_str()));
 }
-
-
